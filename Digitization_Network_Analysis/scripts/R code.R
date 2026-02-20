@@ -82,7 +82,7 @@ raw_data %>%
 
 
 #######################
-# Answer 1
+# Part 1 :Build a balanced book–year panel
 #######################
 
 # Build a balanced book–year panel from 2003 to 2011,
@@ -177,7 +177,7 @@ write_dta(master_dta, file.path(data_clean, "master.dta"))
 
 
 #######################
-# Answer 2 — TWFE main effect
+# Part 2 — TWFE main effect
 #######################
 
 table5_1 <- feols(
@@ -226,7 +226,7 @@ setFixest_dict()
 
 
 #######################
-# Answer 3 — Sun & Abraham robustness
+# Part 3 — Sun & Abraham robustness
 #######################
 
 table5_1_robust <- feols(
@@ -267,7 +267,7 @@ setFixest_dict()
 
 
 #######################
-# Answer 4
+# Part 4
 #######################
 
 # ==========================================
@@ -515,14 +515,6 @@ g_bipartite
 head(sort(degree(g_bipartite), decreasing = TRUE), 5)
 
 
-# --------------------------------------------------
-# Visualization:
-# This part was not required for the assignment,
-# but I still tried to visualize the network structure,
-# which I think is interesting.
-# Since it was not required, I only included these plots
-# in the report, not in the main submission file.
-# --------------------------------------------------
 
 # Take the 50 most connected nodes (just to make the graph readable)
 top_nodes <- names(sort(degree(g_bipartite), decreasing = TRUE))[1:50]
@@ -535,7 +527,8 @@ V(sub_bi)$label <- str_remove(V(sub_bi)$label, "_author$|_topic$")
 V(sub_bi)$label <- str_trunc(V(sub_bi)$label, 15)
 V(sub_bi)$node_category <- ifelse(V(sub_bi)$type, "Author", "Topic")
 
-ggraph(sub_bi, layout = "stress") +
+
+p_bipartite <- ggraph(sub_bi, layout = "stress") +
   geom_edge_link(alpha = 0.2, colour = "grey70") +
   geom_node_point(aes(color = node_category), size = 3.5) + 
   geom_node_text(aes(label = label),
@@ -543,8 +536,18 @@ ggraph(sub_bi, layout = "stress") +
                  size = 2.5) +
   labs(title = "Key Authors and Topics (Top 50 Nodes)",
        color = "Node Category") +
-  scale_color_manual(values = c("Author" = "#00BFC4", "Topic" = "#F8766D")) + 
+  scale_color_manual(values = c("Author" = "#00BFC4", 
+                                "Topic" = "#F8766D")) + 
   theme_void()
+
+# Save figure
+ggsave(
+  filename = file.path(figure, "key_authors_topics_top50.png"),
+  plot = p_bipartite,
+  width = 10,
+  height = 8,
+  dpi = 300
+)
 
 
 # Also looked at author network only
@@ -558,7 +561,9 @@ sub_auth <- induced_subgraph(g_authors, top_authors)
 V(sub_auth)$label <- str_remove(V(sub_auth)$name, "_author$")
 V(sub_auth)$label <- str_trunc(V(sub_auth)$label, 20)
 
-ggraph(sub_auth, layout = "kk") +
+
+
+p_author_network <- ggraph(sub_auth, layout = "kk") +
   geom_edge_link(aes(alpha = weight),
                  colour = "steelblue",
                  width = 0.4) +   
@@ -569,6 +574,15 @@ ggraph(sub_auth, layout = "kk") +
                  size = 3) +
   labs(title = "Author Network (Top 30 by Degree)") +
   theme_graph()
+
+# Save figure
+ggsave(
+  filename = file.path(figure, "author_network_top30.png"),
+  plot = p_author_network,
+  width = 10,
+  height = 8,
+  dpi = 300
+)
 
 
 # how many different topics each author covers (this is "Centrality" score)
@@ -706,10 +720,4 @@ iplot(model_group,
 dev.off()
 par(mfrow = c(1, 1))
 
-#######################
-# Answer 5
-#######################
 
-
-# These files are ready to be compiled into the final
-# `Lu_Pei-Chin_output.tex` document for presentation.
