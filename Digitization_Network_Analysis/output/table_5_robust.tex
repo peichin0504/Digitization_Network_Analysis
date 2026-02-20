@@ -1,0 +1,29 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:table5robust} Robustness Check: Sun \& Abraham (2021) Estimator}
+   \centering
+   \begin{tabular}{lcc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables: & Log(Loans+1)  & Any Loan\\  
+      Model:               & (1)           & (2)\\  
+      \midrule
+      \emph{Variables}\\
+      ATT                  & 0.0043$^{**}$ & 0.0052$^{**}$\\   
+                           & (0.0021)      & (0.0025)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      Book FE              & Yes           & Yes\\  
+      Year-Location FE     & Yes           & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations         & 339,453       & 339,453\\  
+      \midrule \midrule
+      \multicolumn{3}{l}{\emph{Clustered (Book FE) standard-errors in parentheses}}\\
+      \multicolumn{3}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   \vspace{0.5em} This table re-estimates Table~\ref{tab:table5} using the Sun and Abraham (2021) heterogeneity-robust estimator. Reported coefficients correspond to aggregated average treatment effects on the treated (ATT) across cohorts. All specifications include book and year-by-location fixed effects, with standard errors clustered at the book level.
+\end{table}
+
+
